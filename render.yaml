@@ -1,0 +1,19 @@
+# Render blueprint for the API only. The frontend deploys to Vercel (see vercel.json).
+services:
+  - type: web
+    name: displaced-api
+    runtime: node
+    plan: free
+    # tsx (a devDependency) runs the TypeScript server, so install dev dependencies too.
+    buildCommand: npm install --include=dev
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22 # server uses --env-file-if-exists, which needs Node 22+
+      - key: ALLOWED_ORIGINS
+        sync: false # set to your Vercel URL, e.g. https://displaced.vercel.app
+      - key: BLS_API_KEY
+        sync: false # optional
+      - key: NEWS_API_KEY
+        sync: false # optional
